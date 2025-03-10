@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Scheduling</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h2, h3 {
+            color: #333;
+        }
+
+        /* Form Styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 420px;
+            margin: auto;
+        }
+        label {
+            font-weight: 600;
+            margin: 10px 0 5px;
+            display: block;
+            color: #555;
+            width: 100%;
+            text-align: left;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: 0.3s;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Button Styling */
+        button {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            width: 100%;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #0056b3, #004092);
+            transform: scale(1.05);
+        }
+
+        /* Appointment List */
+        #appointmentList {
+            list-style: none;
+            padding: 0;
+            margin: 20px auto;
+            max-width: 420px;
+        }
+        li {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+        }
+        .appointment-text {
+            flex: 1;
+            text-align: left;
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* Cancel Button */
+        .delete-btn {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-left: 10px;
+            width: 70px;
+        }
+        .delete-btn:hover {
+            background: #cc0000;
+            transform: scale(1.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            form, #appointmentList {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Book an Appointment</h2>
+    <form id="appointmentForm">
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+
+        <label for="date">Select Date:</label>
+        <input type="date" id="date" required>
+
+        <label for="time">Select Time:</label>
+        <input type="time" id="time" required>
+
+        <button type="submit">Book Appointment</button>
+    </form>
+
+    <h3>Upcoming Appointments:</h3>
+    <ul id="appointmentList"></ul>
+
+    <script>
+        document.getElementById("appointmentForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            let name = document.getElementById("name").value.trim();
+            let email = document.getElementById("email").value.trim();
+            let date = document.getElementById("date").value;
+            let time = document.getElementById("time").value;
+
+            if (!name || !email || !date || !time) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            let appointment = { name, email, date, time };
+
+            let appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+            appointments.push(appointment);
+            localStorage.setItem("appointments", JSON.stringify(appointments));
+
+            alert("Appointment booked successfully!");
+            document.getElementById("appointmentForm").reset();
+            displayAppointments();
+        });
+
+        function displayAppointments() {
+            let appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+            let appointmentList = document.getElementById("appointmentList");
+            appointmentList.innerHTML = "";
+
+            appointments.forEach((appointment, index) => {
+                let li = document.createElement("li");
+                li.innerHTML = `
+                    <span class="appointment-text">${appointment.name} - ${appointment.date} at ${appointment.time}</span>
+                    <button class="delete-btn" onclick="deleteAppointment(${index})">Cancel</button>
+                `;
+                appointmentList.appendChild(li);
+            });
+        }
+
+        function deleteAppointment(index) {
+            let appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+            appointments.splice(index, 1);
+            localStorage.setItem("appointments", JSON.stringify(appointments));
+            displayAppointments();
+        }
+
+        displayAppointments();
+    </script>
+</body>
+</html>
