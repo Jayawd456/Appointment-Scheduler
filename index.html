@@ -38,7 +38,7 @@
             width: 100%;
             text-align: left;
         }
-        input {
+        input, select {
             width: 100%;
             padding: 12px;
             margin-bottom: 15px;
@@ -48,7 +48,7 @@
             transition: 0.3s;
             box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
         }
-        input:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: #007bff;
             box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
@@ -131,6 +131,49 @@
         <label for="email">Email:</label>
         <input type="email" id="email" required>
 
+        <label for="specialist">Select Specialist:</label>
+        <select id="specialist" required>
+            <option value="">-- Choose --</option>
+            
+            
+<option value="Primary Care Physician (PCP)">Primary Care Physician (PCP)</option>
+
+<option value="Dermatologist">Dermatologist</option>
+<option value="Dentist">Dentist</option>
+<option value="Ear, Nose & Throat Doctor (ENT / Otolaryngologist)">Ear, Nose & Throat Doctor (ENT / Otolaryngologist)</option>
+<option value=""></option>
+<option value="Psychiatrist">Psychiatrist</option>
+<option value="Orthopedic Surgeon (Orthopedist)">Orthopedic Surgeon (Orthopedist)</option>
+<option value="Allergist (Immunologist)">Allergist (Immunologist)</option>
+<option value="Cardiologist (Heart Doctor)">Cardiologist (Heart Doctor)</option>
+<option value="Dietitian / Nutritionist">Dietitian / Nutritionist</option>
+<option value="Endocrinologist (incl Diabetes Specialists)">Endocrinologist (incl Diabetes Specialists)</option>
+<option value="Gastroenterologist">Gastroenterologist</option>
+<option value="Hearing Specialist">Hearing Specialist</option>
+<option value="Hematologist (Blood Specialist)">Hematologist (Blood Specialist)</option>
+<option value="Infectious Disease Specialist">Infectious Disease Specialist</option>
+<option value="Infertility Specialist">Infertility Specialist</option>
+<option value="Nephrologist (Kidney Specialist)">Nephrologist (Kidney Specialist)</option>
+<option value="Neurologist (incl Headache Specialists)">Neurologist (incl Headache Specialists)</option>
+<option value="Therapist / Counselor">Therapist / Counselor</option>
+
+
+
+
+
+
+        </select>
+
+        <label for="hospital">Nearby Hospital:</label>
+        <select id="hospital" required>
+            <option value="">-- Choose --</option>
+        </select>
+
+        <label for="doctor">Select Doctor:</label>
+        <select id="doctor" required>
+            <option value="">-- Choose --</option>
+        </select>
+
         <label for="date">Select Date:</label>
         <input type="date" id="date" required>
 
@@ -141,23 +184,108 @@
     </form>
 
     <h3>Upcoming Appointments:</h3>
+    <button onclick="authenticateOwner()">Admin Access</button>
     <ul id="appointmentList"></ul>
 
     <script>
+        const ownerPassword = "Vri123"; 
+        let ownerAuthenticated = false;
+
+        function authenticateOwner() {
+            let password = prompt("Enter Admin Password:");
+            if (password === ownerPassword) {
+                ownerAuthenticated = true;
+                alert("Access Granted. You can now delete appointments.");
+                displayAppointments();
+            } else {
+                alert("Incorrect Password. Access Denied!");
+            }
+        }
+        const hospitalData = {
+            
+    "Primary Care Physician (PCP)": ["City Hospital", "Community Health Center"],
+    "Dermatologist": ["SkinCare Hospital", "City Hospital"],
+    "Dentist": ["Dental Care Clinic", "MediCare Clinic"],
+    "Ear, Nose & Throat Doctor (ENT / Otolaryngologist)": ["ENT Specialty Hospital", "City Hospital"],
+    "Psychiatrist": ["Mental Wellness Center", "City Hospital"],
+    "Orthopedic Surgeon (Orthopedist)": ["OrthoCare Hospital", "MediCare Clinic"],
+    "Allergist (Immunologist)": ["Allergy & Immunology Center", "City Hospital"],
+    "Cardiologist (Heart Doctor)": ["HeartCare Hospital", "City Hospital"],
+    "Dietitian / Nutritionist": ["Wellness & Nutrition Center", "City Hospital"],
+    "Endocrinologist (incl Diabetes Specialists)": ["Diabetes & Endocrinology Clinic", "City Hospital"],
+    "Gastroenterologist": ["Digestive Health Center", "MediCare Clinic"],
+    "Hearing Specialist": ["Hearing & Speech Clinic", "City Hospital"],
+    "Hematologist (Blood Specialist)": ["Blood Disorders Clinic", "City Hospital"],
+    "Infectious Disease Specialist": ["Infectious Disease Hospital", "MediCare Clinic"],
+    "Infertility Specialist": ["Fertility & Reproductive Center", "City Hospital"],
+    "Nephrologist (Kidney Specialist)": ["Kidney Health Hospital", "MediCare Clinic"],
+    "Neurologist (incl Headache Specialists)": ["NeuroMed Center", "City Hospital"],
+    "Therapist / Counselor": ["Mental Wellness Center", "Community Health Center"]
+};
+
+       
+
+const doctorData = {
+    "City Hospital": ["Dr. Rajesh Sharma, MBBS, MD", "Dr. Priya Mehta, MBBS, MD", "Dr. Arvind Patel, MBBS, MS", "Dr. Nisha Kapoor, MBBS, DNB"],
+    "Community Health Center": ["Dr. Amit Verma, MBBS, MD", "Dr. Sneha Iyer, MBBS, DNB"],
+    "SkinCare Hospital": ["Dr. Rohan Khanna, MBBS, MD (Dermatology)", "Dr. Ananya Bose, MBBS, MD (Dermatology)"],
+    "Dental Care Clinic": ["Dr. Kunal Reddy, BDS, MDS", "Dr. Swati Nair, BDS, MDS"],
+    "MediCare Clinic": ["Dr. Manish Agarwal, MBBS, MD", "Dr. Pooja Deshmukh, MBBS, MS", "Dr. Aditya Joshi, MBBS, DNB"],
+    "ENT Specialty Hospital": ["Dr. Vishal Saxena, MBBS, MS (ENT)", "Dr. Neha Kulkarni, MBBS, MS (ENT)"],
+    "Mental Wellness Center": ["Dr. Sanjay Kapoor, MBBS, MD (Psychiatry)", "Dr. Meera Rao, MBBS, DPM"],
+    "OrthoCare Hospital": ["Dr. Rakesh Nanda, MBBS, MS (Orthopedics)", "Dr. Tanvi Menon, MBBS, MS (Orthopedics)"],
+    "Allergy & Immunology Center": ["Dr. Abhishek Sen, MBBS, MD (Immunology)", "Dr. Vandana Jain, MBBS, MD (Allergy)"],
+    "HeartCare Hospital": ["Dr. Sandeep Malhotra, MBBS, DM (Cardiology)", "Dr. Reena Bhatt, MBBS, MD (Cardiology)"],
+    "Wellness & Nutrition Center": ["Dr. Kiran Desai, MBBS, MSc (Nutrition)", "Dr. Pallavi Rane, MBBS, MD"],
+    "Diabetes & Endocrinology Clinic": ["Dr. Ashok Bhatia, MBBS, DM (Endocrinology)", "Dr. Ritu Sharma, MBBS, MD"],
+    "Digestive Health Center": ["Dr. Naveen Choudhary, MBBS, DM (Gastroenterology)", "Dr. Sakshi Sinha, MBBS, MD"],
+    "Hearing & Speech Clinic": ["Dr. Tarun Gupta, MBBS, MS (ENT)", "Dr. Anjali Khatri, MBBS, MS (ENT)"],
+    "Blood Disorders Clinic": ["Dr. Mohan Iyer, MBBS, DM (Hematology)", "Dr. Priyanka Ghosh, MBBS, MD"],
+    "Infectious Disease Hospital": ["Dr. Vijay Menon, MBBS, MD (Infectious Diseases)", "Dr. Shalini Banerjee, MBBS, MD"],
+    "Fertility & Reproductive Center": ["Dr. Rajiv Saxena, MBBS, MS (Gynecology)", "Dr. Aarti Nair, MBBS, DNB (Gynecology)"],
+    "Kidney Health Hospital": ["Dr. Suraj Kulkarni, MBBS, DM (Nephrology)", "Dr. Deepa Suresh, MBBS, MD"],
+    "NeuroMed Center": ["Dr. Arjun Pandey, MBBS, DM (Neurology)", "Dr. Kavita Narang, MBBS, MD (Neurology)"],
+};
+
+
+        document.getElementById("specialist").addEventListener("change", function() {
+            let specialist = this.value;
+            let hospitalSelect = document.getElementById("hospital");
+            hospitalSelect.innerHTML = '<option value="">-- Choose --</option>';
+            
+            if (specialist) {
+                hospitalData[specialist].forEach(hospital => {
+                    let option = new Option(hospital, hospital);
+                    hospitalSelect.add(option);
+                });
+            }
+        });
+
+        document.getElementById("hospital").addEventListener("change", function() {
+            let hospital = this.value;
+            let doctorSelect = document.getElementById("doctor");
+            doctorSelect.innerHTML = '<option value="">-- Choose --</option>';
+
+            if (hospital) {
+                doctorData[hospital].forEach(doctor => {
+                    let option = new Option(doctor, doctor);
+                    doctorSelect.add(option);
+                });
+            }
+        });
+
         document.getElementById("appointmentForm").addEventListener("submit", function(event) {
             event.preventDefault();
 
-            let name = document.getElementById("name").value.trim();
-            let email = document.getElementById("email").value.trim();
-            let date = document.getElementById("date").value;
-            let time = document.getElementById("time").value;
-
-            if (!name || !email || !date || !time) {
-                alert("Please fill in all fields.");
-                return;
-            }
-
-            let appointment = { name, email, date, time };
+            let appointment = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                specialist: document.getElementById("specialist").value,
+                hospital: document.getElementById("hospital").value,
+                doctor: document.getElementById("doctor").value,
+                date: document.getElementById("date").value,
+                time: document.getElementById("time").value
+            };
 
             let appointments = JSON.parse(localStorage.getItem("appointments")) || [];
             appointments.push(appointment);
@@ -167,23 +295,25 @@
             document.getElementById("appointmentForm").reset();
             displayAppointments();
         });
-
         function displayAppointments() {
             let appointments = JSON.parse(localStorage.getItem("appointments")) || [];
             let appointmentList = document.getElementById("appointmentList");
             appointmentList.innerHTML = "";
-
-            appointments.forEach((appointment, index) => {
+            appointments.forEach((app, index) => {
                 let li = document.createElement("li");
-                li.innerHTML = `
-                    <span class="appointment-text">${appointment.name} - ${appointment.date} at ${appointment.time}</span>
-                    <button class="delete-btn" onclick="deleteAppointment(${index})">Cancel</button>
-                `;
+                li.innerHTML = `${app.doctor} - ${app.specialist} on ${app.date} at ${app.time}`;
+                if (ownerAuthenticated) {
+                    let btn = document.createElement("button");
+                    btn.innerText = "Cancel";
+                    btn.className = "delete-btn";
+                    btn.onclick = function() { cancelAppointment(index); };
+                    li.appendChild(btn);
+                }
                 appointmentList.appendChild(li);
             });
         }
 
-        function deleteAppointment(index) {
+        function cancelAppointment(index) {
             let appointments = JSON.parse(localStorage.getItem("appointments")) || [];
             appointments.splice(index, 1);
             localStorage.setItem("appointments", JSON.stringify(appointments));
