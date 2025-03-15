@@ -124,15 +124,15 @@
 </head>
 <body>
     <h2>Book an Appointment</h2>
-    <form id="appointmentForm">
+    <form   action = "https://formspree.io/f/xwplpklo" method="POST"  >
         <label for="name">Your Name:</label>
-        <input type="text" id="name" required>
+        <input type="text" id="name" name="name" required>
 
         <label for="email">Email:</label>
-        <input type="email" id="email" required>
+        <input type="email" id="email" name="email" required>
 
         <label for="specialist">Select Specialist:</label>
-        <select id="specialist" required>
+        <select id="specialist" name="specialist" required>
             <option value="">-- Choose --</option>
             
             
@@ -165,37 +165,40 @@
         </select>
 
         <label for="hospital">Nearby Hospital:</label>
-        <select id="hospital" required>
+        <select id="hospital" name="hospital" required >
             <option value="">-- Choose --</option>
         </select>
 
         <label for="doctor">Select Doctor:</label>
-        <select id="doctor" required>
+        <select id="doctor"  name="doctor" required>
             <option value="">-- Choose --</option>
         </select>
 
         <label for="date">Select Date:</label>
-        <input type="date" id="date" required>
+        <input type="date" id="date" name="date" required>
 
         <label for="time">Select Time:</label>
-        <input type="time" id="time" required>
+        <input type="time" id="time" name = "time" required>
 
         <button type="submit">Book Appointment</button>
     </form>
 
-    <h3>Upcoming Appointments:</h3>
-    <button onclick="authenticateOwner()">Admin Access</button>
+    <!--<h3>Upcoming Appointments:</h3>
+    <button onclick="authenticateOwner()">Check scheduled Appointments here!<br>Password is
+     (123)</button>-->
     <ul id="appointmentList"></ul>
 
     <script>
-        const ownerPassword = "Vri123"; 
+       
+        
+        const ownerPassword = "123"; 
         let ownerAuthenticated = false;
 
         function authenticateOwner() {
             let password = prompt("Enter Admin Password:");
             if (password === ownerPassword) {
                 ownerAuthenticated = true;
-                alert("Access Granted. You can now delete appointments.");
+                alert("Access Granted. You can now delete appointments.");*/
                 displayAppointments();
             } else {
                 alert("Incorrect Password. Access Denied!");
@@ -301,7 +304,7 @@ const doctorData = {
             appointmentList.innerHTML = "";
             appointments.forEach((app, index) => {
                 let li = document.createElement("li");
-                li.innerHTML = `${app.doctor} - ${app.specialist} on ${app.date} at ${app.time}`;
+                li.innerHTML = `${app.name} schedule appointment with  ${app.doctor} - ${app.specialist} on ${app.date} at ${app.time}`;
                 if (ownerAuthenticated) {
                     let btn = document.createElement("button");
                     btn.innerText = "Cancel";
@@ -323,4 +326,4 @@ const doctorData = {
         displayAppointments();
     </script>
 </body>
-</html>
+</html> 
