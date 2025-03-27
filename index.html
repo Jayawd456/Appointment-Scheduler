@@ -124,7 +124,7 @@
 </head>
 <body>
     <h2>Book an Appointment</h2>
-   <form id="appointmentForm" action="https://formspree.io/f/xwplpklo" method="POST">
+   <form  action="https://formspree.io/f/xwplpklo" method="POST">
 
         <label for="name">Your Name:</label>
         <input type="text" id="name" name="name" required>
@@ -142,7 +142,7 @@
 <option value="Dermatologist">Dermatologist</option>
 <option value="Dentist">Dentist</option>
 <option value="Ear, Nose & Throat Doctor (ENT / Otolaryngologist)">Ear, Nose & Throat Doctor (ENT / Otolaryngologist)</option>
-<option value=""></option>
+
 <option value="Psychiatrist">Psychiatrist</option>
 <option value="Orthopedic Surgeon (Orthopedist)">Orthopedic Surgeon (Orthopedist)</option>
 <option value="Allergist (Immunologist)">Allergist (Immunologist)</option>
@@ -199,7 +199,7 @@
             let password = prompt("Enter Admin Password:");
             if (password === ownerPassword) {
                 ownerAuthenticated = true;
-                alert("Access Granted. You can now delete appointments.");*/
+                alert("Access Granted. You can now delete appointments.");
                 displayAppointments();
             } else {
                 alert("Incorrect Password. Access Denied!");
