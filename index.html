@@ -252,30 +252,31 @@ const doctorData = {
 
 
         document.getElementById("specialist").addEventListener("change", function() {
-            let specialist = this.value;
-            let hospitalSelect = document.getElementById("hospital");
-            hospitalSelect.innerHTML = '<option value="">-- Choose --</option>';
-            
-            if (specialist) {
-                hospitalData[specialist].forEach(hospital => {
-                    let option = new Option(hospital, hospital);
-                    hospitalSelect.add(option);
-                });
-            }
-        });
+    let specialist = this.value;
+    let hospitalSelect = document.getElementById("hospital");
+    hospitalSelect.innerHTML = '<option value="">-- Choose --</option>';
 
-        document.getElementById("hospital").addEventListener("change", function() {
-            let hospital = this.value;
-            let doctorSelect = document.getElementById("doctor");
-            doctorSelect.innerHTML = '<option value="">-- Choose --</option>';
-
-            if (hospital) {
-                doctorData[hospital].forEach(doctor => {
-                    let option = new Option(doctor, doctor);
-                    doctorSelect.add(option);
-                });
-            }
+    if (specialist && hospitalData[specialist]) {  // Check if hospitals exist for the selected specialist
+        hospitalData[specialist].forEach(hospital => {
+            let option = new Option(hospital, hospital);
+            hospitalSelect.add(option);
         });
+    }
+});
+
+document.getElementById("hospital").addEventListener("change", function() {
+    let hospital = this.value;
+    let doctorSelect = document.getElementById("doctor");
+    doctorSelect.innerHTML = '<option value="">-- Choose --</option>';
+
+    if (hospital && doctorData[hospital]) { // Ensure hospital exists before mapping doctors
+        doctorData[hospital].forEach(doctor => {
+            let option = new Option(doctor, doctor);
+            doctorSelect.add(option);
+        });
+    }
+});
+
 
         document.getElementById("appointmentForm").addEventListener("submit", function(event) {
             event.preventDefault();
