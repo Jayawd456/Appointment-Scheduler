@@ -190,7 +190,38 @@
     <ul id="appointmentList"></ul>
 
     <script>
-       
+       <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBK_fSk3G0HnjLGN6Wfcrxrhr4KcOy1ufY",
+      authDomain: "delivery-feedback-87422.firebaseapp.com",
+      databaseURL: "https://delivery-feedback-87422-default-rtdb.firebaseio.com",
+      projectId: "delivery-feedback-87422",
+      storageBucket: "delivery-feedback-87422.firebasestorage.app",
+      messagingSenderId: "159292252999",
+      appId: "1:159292252999:web:5edbe6cdb86c75e1fca262",
+      measurementId: "G-41SNWPN1L6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const database = getDatabase(app);
+
+    let selectedRating = 0;
+    const stars = document.querySelectorAll(".star");
+
+    stars.forEach((star, index) => {
+      star.addEventListener("click", () => {
+        selectedRating = parseInt(star.dataset.rating);
+        stars.forEach(s => s.classList.remove("active"));
+        for (let i = 0; i <= index; i++) {
+          stars[i].classList.add("active");
+        }
+      });
+    });
         
         const ownerPassword = "123"; 
         let ownerAuthenticated = false;
